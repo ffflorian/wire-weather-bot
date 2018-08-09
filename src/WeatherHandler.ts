@@ -128,12 +128,12 @@ class WeatherHandler extends MessageHandler {
         }
         const {
           name: cityName,
-          weather,
+          weather: [{id: weatherId, description}],
           main: {temp: temperature},
         } = response;
         await this.sendText(
           conversationId,
-          `Current weather in **${cityName}**: ${weather[0].description}, ${temperature.toFixed(0)} °C.`
+          `Current weather in **${cityName}**: ${description}, ${temperature.toFixed(0)} °C. ${this.iconToEmoji(weatherId)}`
         );
         break;
       }
