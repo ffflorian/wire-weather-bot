@@ -71,7 +71,7 @@ class WeatherHandler extends MessageHandler {
     return [MessageType.NO_COMMAND, ''];
   }
 
-  private iconToEmoji(weatherId: number): string {
+  private mapIconToEmoji(weatherId: number): string {
     if (
       weatherId.toString().startsWith('2') ||
       weatherId === 900 ||
@@ -92,7 +92,7 @@ class WeatherHandler extends MessageHandler {
       return '☀️';
     } else if (weatherId === 801) {
       return '⛅';
-    } else if (weatherId === 802 || weatherId === 803 || weatherId === 803) {
+    } else if (weatherId === 802 || weatherId === 803) {
       return '☁️☁️';
     } else if (weatherId === 904) {
       return '🌞';
@@ -133,7 +133,9 @@ class WeatherHandler extends MessageHandler {
         } = response;
         await this.sendText(
           conversationId,
-          `Current weather in **${cityName}**: ${description}, ${temperature.toFixed(0)} °C. ${this.iconToEmoji(weatherId)}`
+          `Current weather in **${cityName}**: ${description}, ${temperature.toFixed(0)} °C. ${this.mapIconToEmoji(
+            weatherId
+          )}`
         );
         break;
       }
@@ -176,7 +178,7 @@ class WeatherHandler extends MessageHandler {
       const maxTemp = temp_max.toFixed(0);
       const weatherId = weather[0].id;
       const temperature = minTemp === maxTemp ? `around ${minTemp} °C` : `between ${minTemp} °C and ${maxTemp} °C`;
-      return result + `**${weekday}:** ${weather[0].description}, ${temperature}. ${this.iconToEmoji(weatherId)}\n`;
+      return result + `**${weekday}:** ${weather[0].description}, ${temperature}. ${this.mapIconToEmoji(weatherId)}\n`;
     }, '');
     await this.sendText(conversationId, `5-day forecast for **${cityName}**:\n\n${daysList}`);
   }
