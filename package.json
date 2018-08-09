@@ -13,7 +13,7 @@
     "typescript": "3.0.1"
   },
   "license": "GPL-3.0",
-  "main": "dist/main/index.js",
+  "main": "dist/index.js",
   "name": "wire-weather-bot",
   "repository": "https://github.com/ffflorian/wire-weather-bot.git",
   "scripts": {
