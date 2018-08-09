@@ -3,7 +3,7 @@
     "declaration": false,
     "lib": [
       "dom",
-      "es7"
+      "es2018"
     ],
     "module": "commonjs",
     "moduleResolution": "node",
@@ -14,7 +14,7 @@
     "rootDir": "src",
     "sourceMap": false,
     "strict": true,
-    "target": "es6"
+    "target": "es2018"
   },
   "exclude": [
     "dist",
