@@ -117,9 +117,9 @@
     spark-md5 "3.0.0"
     tough-cookie "2.4.3"
 
-"@wireapp/bot-api@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@wireapp/bot-api/-/bot-api-0.2.0.tgz#988bb9a470edae83587d8551150323a135bc5374"
+"@wireapp/bot-api@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@wireapp/bot-api/-/bot-api-0.2.1.tgz#c6717e2f63563b5fa5a4f82dd820c7b650dfffd2"
   dependencies:
     "@wireapp/core" "5.3.0"
     pure-uuid "1.5.3"
