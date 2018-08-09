@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@types/node": "10.5.7",
+    "@wireapp/bot-api": "0.2.0",
+    "cross-env": "5.2.0",
+    "dotenv": "6.0.0",
+    "openweathermap-api-client": "1.0.3"
+  },
+  "devDependencies": {
+    "fs-extra": "7.0.0",
+    "prettier": "1.14.2",
+    "rimraf": "2.6.2",
+    "typescript": "3.0.1"
+  },
+  "license": "GPL-3.0",
+  "main": "dist/main/index.js",
+  "name": "wire-weather-bot",
+  "repository": "https://github.com/ffflorian/wire-weather-bot.git",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "dist": "yarn clean && yarn build",
+    "prettier": "prettier --single-quote --write src/**/*.ts",
+    "start": "cross-env NODE_DEBUG=@wireapp/* node dist/main/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}
