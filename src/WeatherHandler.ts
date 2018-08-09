@@ -4,7 +4,7 @@ import {PayloadBundleIncoming, PayloadBundleType, ReactionType} from '@wireapp/c
 import {Connection} from '@wireapp/api-client/dist/commonjs/connection';
 import {TextContent} from '@wireapp/core/dist/conversation/content/';
 
-const {version}: {version: string} = require('../../package.json');
+const {version}: {version: string} = require('../package.json');
 
 enum MessageType {
   FORECAST = 'forecast',
