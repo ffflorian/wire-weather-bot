@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import {Bot} from '@wireapp/bot-api';
-import {WeatherHandler} from './WeatherHandler';
+import {MainHandler} from './MainHandler';
 import {OwmApiClient as WeatherAPI} from 'openweathermap-api-client';
 
 ['WIRE_EMAIL', 'WIRE_PASSWORD', 'OPEN_WEATHER_API_KEY'].forEach(envVar => {
@@ -22,5 +22,11 @@ const weatherAPI = new WeatherAPI({
   units: 'metric',
 });
 
-bot.addHandler(new WeatherHandler(weatherAPI));
+
+const mainHandler = new MainHandler({
+  weatherAPI,
+  feedbackConversationId: process.env.WIRE_FEEDBACK_CONVERSATION_ID,
+});
+
+bot.addHandler(mainHandler);
 bot.start();
