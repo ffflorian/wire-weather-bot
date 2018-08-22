@@ -1,12 +1,12 @@
 import * as logdown from 'logdown';
-import {OwmApiClient as WeatherAPI} from 'openweathermap-api-client';
+import {OwmApiClient as WeatherAPI, ForecastList} from 'openweathermap-api-client';
 import * as Utils from './Utils';
 
 class WeatherService {
   private readonly logger: logdown.Logger;
 
   constructor(private readonly weatherAPI: WeatherAPI) {
-    this.logger = logdown('wire-weaether-bot/MainHandler', {
+    this.logger = logdown('wire-weather-bot/WeatherService', {
       logger: console,
       markdown: false,
     });
@@ -22,26 +22,29 @@ class WeatherService {
     }
 
     const {
-      city: {name: cityName},
+      city: {name: cityName, country: countryName},
       list: forecastList,
     } = response;
-    const daysList = forecastList.filter(forecast => forecast.dt_txt.includes('09:00')).reduce((result, forecast) => {
+
+    this.logger.info(`Received "${cityName}, ${countryName}" for query "${location}".`);
+
+    const daysList = forecastList.filter(({dt_txt}) => dt_txt.includes('12:00')).reduce((result, forecast) => {
       const {
         dt_txt,
-        main: {temp_max, temp_min},
+        main: {temp: temp_avg, temp_max, temp_min},
         weather: [{id: weatherId, description}],
       } = forecast;
       const weekday = new Date(dt_txt).toLocaleTimeString('en-US', {weekday: 'long'}).split(' ')[0];
       const minTemp = temp_min.toFixed(0);
       const maxTemp = temp_max.toFixed(0);
-      const temperature = minTemp === maxTemp ? `around ${minTemp} °C` : `between ${minTemp} °C and ${maxTemp} °C`;
+      const temperature = minTemp === maxTemp ? temp_avg.toFixed(0) : `between ${minTemp} °C and ${maxTemp}`;
 
       const emoji = Utils.mapIconToEmoji(weatherId);
 
-      return result + `**${weekday}:** ${description}, ${temperature}. ${emoji}\n`;
+      return result + `- **${weekday}:** ${description}, ${temperature} °C. ${emoji}\n`;
     }, '');
 
-    return `5-day forecast for **${cityName}**:\n\n${daysList}`;
+    return `5-day forecast for **${cityName}, ${countryName}** (each at 12:00 local time):\n\n${daysList}`;
   }
 
   async getWeather(content: string): Promise<string> {
@@ -57,11 +60,14 @@ class WeatherService {
       name: cityName,
       weather: [{id: weatherId, description}],
       main: {temp: temperature},
+      sys: {country: countryName}
     } = response;
+
+    this.logger.info(`Received "${cityName}, ${countryName}" for query "${location}".`);
 
     const emoji = Utils.mapIconToEmoji(weatherId);
 
-    return `Current weather in **${cityName}**: ${description}, ${temperature.toFixed(0)} °C. ${emoji}`;
+    return `Current weather in **${cityName}, ${countryName}**: ${description}, ${temperature.toFixed(0)} °C. ${emoji}`;
   }
 }
 

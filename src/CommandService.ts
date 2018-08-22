@@ -24,7 +24,7 @@ enum CommandType {
   WEATHER,
 }
 
-const logger = logdown('wire-xkcd-bot/CommandService', {
+const logger = logdown('wire-weather-bot/CommandService', {
   logger: console,
   markdown: false,
 });

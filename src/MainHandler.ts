@@ -23,7 +23,6 @@ class MainHandler extends MessageHandler {
   private readonly helpText = `**Hello!** 😎 This is weather bot v${version} speaking.\n\nAvailable commands:\n${CommandService.formatCommands()}\n\nMore information about this bot: https://github.com/ffflorian/wire-weather-bot`;
   private answerCache: {
     [conversationId: string]: {
-      content?: string;
       type: CommandType;
       waitingForContent: boolean;
     };
@@ -35,7 +34,7 @@ class MainHandler extends MessageHandler {
     this.feedbackConversationId = feedbackConversationId;
     this.weatherService = new WeatherService(weatherAPI);
     this.answerCache = {};
-    this.logger = logdown('wire-weaether-bot/MainHandler', {
+    this.logger = logdown('wire-weather-bot/MainHandler', {
       logger: console,
       markdown: false,
     });

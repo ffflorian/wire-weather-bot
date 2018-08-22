@@ -20,7 +20,7 @@ const mapIconToEmoji = (weatherId: number): string => {
   } else if (weatherId === 801) {
     return '⛅';
   } else if (weatherId === 802 || weatherId === 803) {
-    return '☁️☁️';
+    return '☁️️';
   } else if (weatherId === 904) {
     return '🌞';
   }
