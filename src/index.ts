@@ -22,7 +22,6 @@ const weatherAPI = new WeatherAPI({
   units: 'metric',
 });
 
-
 const mainHandler = new MainHandler({
   weatherAPI,
   feedbackConversationId: process.env.WIRE_FEEDBACK_CONVERSATION_ID,

@@ -25,7 +25,7 @@ const mapIconToEmoji = (weatherId: number): string => {
     return '🌞';
   }
   return '😎';
-}
+};
 
 const toHHMMSS = (input: string): string => {
   const pad = (t: number) => (t < 10 ? '0' + t : t);
