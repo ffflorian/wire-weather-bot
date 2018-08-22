@@ -70,7 +70,7 @@ class MainHandler extends MessageHandler {
       case CommandType.UNKNOWN_COMMAND: {
         if (this.answerCache[conversationId]) {
           const {type: cachedCommandType, waitingForContent} = this.answerCache[conversationId];
-          if (waitingForContent && commandType === cachedCommandType) {
+          if (waitingForContent) {
             await this.sendReaction(conversationId, messageId, ReactionType.LIKE);
             delete this.answerCache[conversationId];
             return this.answer(conversationId, {content, commandType: cachedCommandType, rawCommand}, senderId);
