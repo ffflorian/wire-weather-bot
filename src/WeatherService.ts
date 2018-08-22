@@ -60,7 +60,7 @@ class WeatherService {
       name: cityName,
       weather: [{id: weatherId, description}],
       main: {temp: temperature},
-      sys: {country: countryName}
+      sys: {country: countryName},
     } = response;
 
     this.logger.info(`Received "${cityName}, ${countryName}" for query "${location}".`);
