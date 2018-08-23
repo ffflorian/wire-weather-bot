@@ -62,7 +62,7 @@ class MainHandler extends MessageHandler {
   }
 
   async handleText(conversationId: string, text: string, messageId: string, senderId: string): Promise<void> {
-    const {commandType, content, rawCommand} = CommandService.parseCommand(text);
+    const {commandType, parsedArguments, rawCommand} = CommandService.parseCommand(text);
 
     switch (commandType) {
       case CommandType.NO_COMMAND:
@@ -72,22 +72,23 @@ class MainHandler extends MessageHandler {
           if (waitingForContent) {
             await this.sendReaction(conversationId, messageId, ReactionType.LIKE);
             delete this.answerCache[conversationId];
-            return this.answer(conversationId, {content, commandType: cachedCommandType, rawCommand}, senderId);
+            return this.answer(conversationId, {parsedArguments, commandType: cachedCommandType, rawCommand}, senderId);
           }
         }
-        return;
+        return this.answer(conversationId, {commandType, parsedArguments, rawCommand}, senderId);
       }
       default: {
         await this.sendReaction(conversationId, messageId, ReactionType.LIKE);
-        break;
+        if (this.answerCache[conversationId]) {
+          delete this.answerCache[conversationId];
+        }
+        return this.answer(conversationId, {commandType, parsedArguments, rawCommand}, senderId);
       }
     }
-
-    return this.answer(conversationId, {commandType, content, rawCommand}, senderId);
   }
 
   async answer(conversationId: string, parsedCommand: ParsedCommand, senderId: string) {
-    const {content, rawCommand, commandType} = parsedCommand;
+    const {parsedArguments, rawCommand, commandType} = parsedCommand;
     switch (commandType) {
       case CommandType.HELP: {
         return this.sendText(conversationId, this.helpText);
@@ -96,7 +97,7 @@ class MainHandler extends MessageHandler {
         return this.sendText(conversationId, `Current uptime: ${Utils.toHHMMSS(process.uptime().toString())}`);
       }
       case CommandType.WEATHER: {
-        if (!content) {
+        if (!parsedArguments) {
           this.answerCache[conversationId] = {
             type: commandType,
             waitingForContent: true,
@@ -104,11 +105,11 @@ class MainHandler extends MessageHandler {
           return this.sendText(conversationId, 'For which city would you like to get the weather information?');
         }
 
-        const weather = await this.weatherService.getWeather(content);
+        const weather = await this.weatherService.getWeather(parsedArguments);
         return this.sendText(conversationId, weather);
       }
       case CommandType.FORECAST: {
-        if (!content) {
+        if (!parsedArguments) {
           this.answerCache[conversationId] = {
             type: commandType,
             waitingForContent: true,
@@ -116,7 +117,7 @@ class MainHandler extends MessageHandler {
           return this.sendText(conversationId, 'For which city would you like to get the weather forecast?');
         }
 
-        const forecast = await this.weatherService.getForecast(content);
+        const forecast = await this.weatherService.getForecast(parsedArguments);
         return this.sendText(conversationId, forecast);
       }
       case CommandType.FEEDBACK: {
@@ -124,7 +125,7 @@ class MainHandler extends MessageHandler {
           return this.sendText(conversationId, `Sorry, the developer did not specify a feedback channel.`);
         }
 
-        if (!content) {
+        if (!parsedArguments) {
           this.answerCache[conversationId] = {
             type: commandType,
             waitingForContent: true,
@@ -132,7 +133,7 @@ class MainHandler extends MessageHandler {
           return this.sendText(conversationId, 'What would you like to tell the developer?');
         }
 
-        await this.sendText(this.feedbackConversationId, `Feedback from user "${senderId}":\n"${content}"`);
+        await this.sendText(this.feedbackConversationId, `Feedback from user "${senderId}":\n"${parsedArguments}"`);
         delete this.answerCache[conversationId];
         return this.sendText(conversationId, 'Thank you for your feedback.');
       }

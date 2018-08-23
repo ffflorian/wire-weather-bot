@@ -10,7 +10,7 @@ interface BasicCommand {
 
 export interface ParsedCommand {
   commandType: CommandType;
-  content?: string;
+  parsedArguments?: string;
   rawCommand: string;
 }
 
@@ -86,7 +86,7 @@ const CommandService = {
           logger.info(`Found command "${command.command}" for "/${parsedCommand}".`);
           return {
             commandType: command.type,
-            content: command.parseArguments ? parsedArguments : '',
+            parsedArguments: command.parseArguments ? parsedArguments : '',
             rawCommand: parsedCommand,
           };
         }
@@ -99,7 +99,7 @@ const CommandService = {
     }
     logger.info(`No command found for "${message.length > 10 ? message.substr(0, 10) + '...' : message}".`);
     return {
-      content: message,
+      parsedArguments: message,
       rawCommand: message,
       commandType: CommandType.NO_COMMAND,
     };
