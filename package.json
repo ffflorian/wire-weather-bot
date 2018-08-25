@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@types/dotenv": "4.0.3",
-    "@types/node": "10.9.1",
+    "@types/node": "10.9.2",
     "@wireapp/bot-api": "0.3.11",
     "cross-env": "5.2.0",
     "dotenv": "6.0.0",
