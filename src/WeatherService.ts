@@ -1,5 +1,5 @@
 import * as logdown from 'logdown';
-import {OwmApiClient as WeatherAPI, ForecastList} from 'openweathermap-api-client';
+import {OwmApiClient as WeatherAPI} from 'openweathermap-api-client';
 import * as Utils from './Utils';
 
 class WeatherService {
@@ -47,11 +47,11 @@ class WeatherService {
     return `5-day forecast for **${cityName}, ${countryName}** (each at 12:00 local time):\n\n${daysList}`;
   }
 
-  async getWeather(content: string): Promise<string> {
+  async getWeather(location: string): Promise<string> {
     let response;
 
     try {
-      response = await this.weatherAPI.current(content);
+      response = await this.weatherAPI.current(location);
     } catch (error) {
       return `Oops. Something went wrong with the weather API: "${error}"`;
     }
